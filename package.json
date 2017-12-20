@@ -1,0 +1,22 @@
+{
+  "name": "twittrer",
+  "version": "1.0.0",
+  "description": "Twitter bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skrillcon/Twittrer.git"
+  },
+  "author": "Connor Hasting",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skrillcon/Twittrer/issues"
+  },
+  "homepage": "https://github.com/skrillcon/Twittrer#readme",
+  "dependencies": {
+    "twit": "^2.2.9"
+  }
+}
