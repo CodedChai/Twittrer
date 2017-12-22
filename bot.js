@@ -1,10 +1,10 @@
 console.log('The bot is starting');
 
-var Twit = require('twit')
-	, request = require('request')
-		, cheerio = require('cheerio');
+var Twit = require('twit');
+var request = require('request');
+var cheerio = require('cheerio');
 
-var ROOT = 'http://pitchfork.com';
+var ROOT = 'https://pitchfork.com';
 
 var T = new Twit({
   consumer_key:         'c7OFtiQpCevBgpU2EPfUIjF2P',
@@ -19,24 +19,27 @@ var params = {
 	count: 1
 };
 
-T.get('search/tweets', params, gotData);
+//T.get('search/tweets', params, gotData);
 
+findBestSong();
 
-function findRecentBest(){
-	var url = '${ROOT}/reviews/best/tracks/';
+function findBestSong(){
+	var url = 'https://pitchfork.com/reviews/best/tracks/';
 
 	return new Promise((resolve, reject) => {
 		request(url, (err, res, body) => {
 			if (err) return reject(err);
 
 			var $ = cheerio.load(body);
-			var bestTrack = $('div.track-details').attr('href');
-
+			//console.log(body);
+			var bestTrack = $('div.track-hero').text();
+			console.log(bestTrack);
 			return resolve(bestTrack);
 		})
-	})
+	}).catch((err) => {
+			console.error(err);
+		})
 }
-
 function gotData(err, data, response){
 	var tweets = data.statuses;
 	for(var i = 0; i < tweets.length; i++){
