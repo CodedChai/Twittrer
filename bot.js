@@ -1,6 +1,10 @@
 console.log('The bot is starting');
 
-var Twit = require('twit');
+var Twit = require('twit')
+	, request = require('request')
+		, cheerio = require('cheerio');
+
+var ROOT = 'http://pitchfork.com';
 
 var T = new Twit({
   consumer_key:         'c7OFtiQpCevBgpU2EPfUIjF2P',
@@ -16,6 +20,22 @@ var params = {
 };
 
 T.get('search/tweets', params, gotData);
+
+
+function findRecentBest(){
+	var url = '${ROOT}/reviews/best/tracks/';
+
+	return new Promise((resolve, reject) => {
+		request(url, (err, res, body) => {
+			if (err) return reject(err);
+
+			var $ = cheerio.load(body);
+			var bestTrack = $('div.track-details').attr('href');
+
+			return resolve(bestTrack);
+		})
+	})
+}
 
 function gotData(err, data, response){
 	var tweets = data.statuses;
