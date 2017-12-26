@@ -21,7 +21,9 @@ var params = {
 
 //T.get('search/tweets', params, gotData);
 
-findBestSong();
+var output = findBestSong();
+
+console.log(output);
 
 function findBestSong(){
 	var url = 'https://pitchfork.com/reviews/best/tracks/';
@@ -32,9 +34,11 @@ function findBestSong(){
 
 			var $ = cheerio.load(body);
 			//console.log(body);
-			var bestTrack = $('div.track-hero').text();
+			var bestArtist = $('div.track-hero').find('ul.artist-list').text();
+			var bestTrack = $('div.track-hero').find('h2.title').text();
+			console.log(bestArtist);
 			console.log(bestTrack);
-			return resolve(bestTrack);
+			return resolve(bestTrack + " by " + bestArtist);
 		})
 	}).catch((err) => {
 			console.error(err);
