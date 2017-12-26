@@ -25,11 +25,15 @@ let output = Promise.resolve(findBestSong());
 
 output.then(function(v) {
   console.log(v);
+
+	var tweet = { 
+		status: v
+	}
+
+	T.post('statuses/update', tweet, tweeted);
 }, function(e) {
   console.log(e); // TypeError: Throwing
 });
-
-console.log(output);
 
 function findBestSong(){
 	var url = 'https://pitchfork.com/reviews/best/tracks/';
@@ -39,20 +43,29 @@ function findBestSong(){
 			if (err) return reject(err);
 
 			var $ = cheerio.load(body);
-			//console.log(body);
 			var bestArtist = $('div.track-hero').find('ul.artist-list').text();
 			var bestTrack = $('div.track-hero').find('h2.title').text();
-			console.log(bestArtist);
-			console.log(bestTrack);
+
 			return resolve(bestTrack + " by " + bestArtist);
 		})
 	}).catch((err) => {
 			console.error(err);
 		})
 }
+
 function gotData(err, data, response){
 	var tweets = data.statuses;
 	for(var i = 0; i < tweets.length; i++){
 		console.log(tweets[i].text);
+	}
+}
+
+
+
+function tweeted(err, data, response){
+	if(err){
+		console.log("Something went wrong!");
+	} else {
+		console.log(data);
 	}
 }
