@@ -21,7 +21,13 @@ var params = {
 
 //T.get('search/tweets', params, gotData);
 
-var output = findBestSong();
+let output = Promise.resolve(findBestSong());
+
+output.then(function(v) {
+  console.log(v);
+}, function(e) {
+  console.log(e); // TypeError: Throwing
+});
 
 console.log(output);
 
