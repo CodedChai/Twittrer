@@ -24,10 +24,10 @@ var params = {
 let output = Promise.resolve(findBestSong());
 
 output.then(function(v) {
-  console.log(v);
-
+  	let tweetStatus = 'I recommend that you give ' + v + ' a listen.';
+  	  	console.log(tweetStatus);
 	var tweet = { 
-		status: v
+		status: tweetStatus
 	}
 
 	T.post('statuses/update', tweet, tweeted);
