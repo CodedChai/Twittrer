@@ -14,26 +14,30 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 })
 
-var params = { 
-	q: 'end of the world since:2012-12-21', 
-	count: 1
-};
 
-//T.get('search/tweets', params, gotData);
+tweetSong();
 
-let output = Promise.resolve(findBestSong());
+// Check the song and tweet every 12 hours
+setInterval(tweetSong, 1000*60*60*12);
 
-output.then(function(v) {
-  	let tweetStatus = 'I recommend that you give ' + v + ' a listen.';
-  	  	console.log(tweetStatus);
-	var tweet = { 
-		status: tweetStatus
-	}
+function tweetSong(){
+	let output = Promise.resolve(findBestSong());
 
-	T.post('statuses/update', tweet, tweeted);
-}, function(e) {
-  console.log(e); // TypeError: Throwing
-});
+
+	output.then(function(v) {
+	  	let tweetStatus = 'I recommend that you give a listen to ' + v;
+	  	  	console.log(tweetStatus);
+		var tweet = { 
+			status: tweetStatus
+		}
+		T.post('statuses/update', tweet, tweeted);
+		
+	}, function(e) {
+	  console.log(e); // TypeError: Throwing
+	});
+}
+
+
 
 function findBestSong(){
 	var url = 'https://pitchfork.com/reviews/best/tracks/';
@@ -60,11 +64,9 @@ function gotData(err, data, response){
 	}
 }
 
-
-
 function tweeted(err, data, response){
 	if(err){
-		console.log("Something went wrong!");
+		console.log("Something went wrong! Perhaps it was already posted.");
 	} else {
 		console.log(data);
 	}
