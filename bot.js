@@ -30,7 +30,14 @@ function tweetSong(){
 		var tweet = { 
 			status: tweetStatus
 		}
-		T.post('statuses/update', tweet, tweeted);
+		if(shouldTweet(tweetStatus)){
+			console.log("It's okay to tweet out.");
+			T.post('statuses/update', tweet, tweeted);
+		} else {
+			console.log("I already tweeted this out, I don't want to spam.");
+		}
+
+	
 		
 	}, function(e) {
 	  console.log(e); // TypeError: Throwing
@@ -38,6 +45,17 @@ function tweetSong(){
 }
 
 
+// False means don't tweet anything
+function shouldTweet(tweetStatus){
+	T.get('search/tweets', { q: tweetStatus, count: 1 }, function(err, data, response) {
+	  if(data['statuses'][0]['user']['name'] == 'MusicRec')
+	  {
+	  	return false;
+	  } else {
+	  	return true;
+	  }
+	})
+}
 
 function findBestSong(){
 	var url = 'https://pitchfork.com/reviews/best/tracks/';
